@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     //id ("com.google.firebase.crashlytics")
 }
 
@@ -35,6 +35,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -48,16 +51,27 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     // Firebase Authentication
-    implementation ("com.google.firebase:firebase-auth:22.1.0")
+    implementation("com.google.firebase:firebase-auth:22.1.0")
 
     // Firestore (or Realtime Database)
-    implementation ("com.google.firebase:firebase-firestore:24.6.0")
+    implementation("com.google.firebase:firebase-firestore:24.6.0")
     // OR use Realtime Database if preferred
-    implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-database:20.3.0")
 
     // Android UI libraries
-    implementation ("androidx.appcompat:appcompat:1.6.1")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    implementation("androidx.lifecycle:lifecycle-process:2.6.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+    //indicator
+    implementation("com.tbuonomo:dotsindicator:4.2")
+
+    // sdp size
+    implementation("com.intuit.sdp:sdp-android:1.1.0")
+    // ssp size
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
 
 }
