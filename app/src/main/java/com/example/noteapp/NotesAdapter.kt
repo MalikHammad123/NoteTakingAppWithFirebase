@@ -1,36 +1,52 @@
 package com.example.noteapp
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.noteapp.databinding.ItemNoteBinding
+import com.example.noteapp.model.Note
 
-class NotesAdapter : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
-    private val notesList = mutableListOf<Note>()
+class NotesAdapter(
+    private val notes: MutableList<Note>,
+    private val onEditClicked: (Note) -> Unit,
+    private val onDeleteClicked: (Note) -> Unit
+) : RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
-    fun submitList(newNotes: List<Note>) {
-        notesList.clear()
-        notesList.addAll(newNotes)
-        notifyDataSetChanged()
-    }
+    class NoteViewHolder(val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
-        return NoteViewHolder(view)
+        val binding = ItemNoteBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return NoteViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(notesList[position])
-    }
+        val note = notes[position]
+        holder.binding.tvContent.text = note.content
+        holder.binding.tvTimestamp.text = android.text.format.DateFormat.format(
+            "dd/MM/yyyy HH:mm:ss",
+            note.timestamp
+        )
 
-    override fun getItemCount(): Int = notesList.size
+        holder.binding.btnEdit.setOnClickListener {
+            onEditClicked(note)
+        }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val noteTextView: TextView = itemView.findViewById(R.id.noteTextView)
-
-        fun bind(note: Note) {
-            noteTextView.text = note.content
+        holder.binding.btnDelete.setOnClickListener {
+            onDeleteClicked(note)
         }
     }
+
+    override fun getItemCount(): Int = notes.size
+
+    fun updateNotes(newNotes: List<Note>) {
+        notes.clear()
+        notes.addAll(newNotes)
+        notifyDataSetChanged()
+    }
 }
+
+

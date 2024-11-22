@@ -1,93 +1,117 @@
 package com.example.noteapp
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.noteapp.activities.CreateTaskActivity
+import com.example.noteapp.databinding.ActivityMainBinding
+import com.example.noteapp.model.Note
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
-data class Note(
-    val id: String = "",
-    val content: String = "",
-    val timestamp: Long = System.currentTimeMillis(),
-    val userId: String = ""  // New field to store the author's user ID
-)
+
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
-    private lateinit var notesAdapter: NotesAdapter
-    private lateinit var notesListener: ListenerRegistration
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var noteAdapter: NotesAdapter
+    private val notesList = mutableListOf<Note>()
+
+    companion object {
+        private const val REQUEST_CODE_CREATE_TASK = 1
+        private const val REQUEST_CODE_EDIT_TASK = 2
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+        // Initialize Firestore
+        firestore = FirebaseFirestore.getInstance()
 
-        // RecyclerView setup
-        val recyclerView = findViewById<RecyclerView>(R.id.notesRecyclerView)
-        notesAdapter = NotesAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = notesAdapter
-
-        // Add Note button
-        findViewById<Button>(R.id.addNoteButton).setOnClickListener {
-            val noteContent = findViewById<EditText>(R.id.noteEditText).text.toString()
-            addNoteToFirestore(noteContent)
-        }
-
-        // Load notes from Firestore
-        loadNotes()
-    }
-
-    private fun addNoteToFirestore(content: String) {
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-            Toast.makeText(this, "User not authenticated.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val newNote = hashMapOf(
-            "content" to content,
-            "timestamp" to System.currentTimeMillis(),
-            "userId" to currentUser.uid  // Save the note with the user's ID
+        // Initialize RecyclerView
+        noteAdapter = NotesAdapter(notesList,
+            onEditClicked = { note ->
+                val intent = Intent(this, CreateTaskActivity::class.java)
+                intent.putExtra("editNote", note)
+                startActivityForResult(intent, REQUEST_CODE_EDIT_TASK)
+            },
+            onDeleteClicked = { note ->
+                deleteNoteFromFirestore(note)
+            }
         )
+        binding.notesRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = noteAdapter
+        }
 
-        db.collection("notes")
-            .add(newNote)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Note added!", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error adding note.", Toast.LENGTH_SHORT).show()
-            }
+        // Load existing notes from Firestore
+        fetchNotesFromFirestore()
+
+        // Handle addNoteButton click
+        binding.addNoteButton.setOnClickListener {
+            val intent = Intent(this, CreateTaskActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_CREATE_TASK)
+        }
     }
 
-
-    private fun loadNotes() {
-        notesListener = db.collection("notes")
-            .orderBy("timestamp")
-            .addSnapshotListener { snapshot, e ->
-                if (e != null || snapshot == null) return@addSnapshotListener
-
-                val notesList = snapshot.documents.mapNotNull { doc ->
-                    doc.toObject(Note::class.java)?.copy(id = doc.id)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            val updatedNote = data?.getSerializableExtra("taskNote") as? Note
+            when (requestCode) {
+                REQUEST_CODE_CREATE_TASK -> {
+                    updatedNote?.let {
+                        saveNoteToFirestore(it)
+                    }
                 }
-                notesAdapter.submitList(notesList)
+                REQUEST_CODE_EDIT_TASK -> {
+                    updatedNote?.let {
+                        updateNoteInFirestore(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveNoteToFirestore(note: Note) {
+        firestore.collection("notes").add(note)
+            .addOnSuccessListener {
+                fetchNotesFromFirestore() // Refresh notes
             }
     }
 
+    private fun updateNoteInFirestore(note: Note) {
+        firestore.collection("notes").document(note.id!!)
+            .set(note)
+            .addOnSuccessListener {
+                fetchNotesFromFirestore() // Refresh notes
+            }
+    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        notesListener.remove()
+    private fun deleteNoteFromFirestore(note: Note) {
+        firestore.collection("notes").document(note.id!!)
+            .delete()
+            .addOnSuccessListener {
+                fetchNotesFromFirestore() // Refresh notes
+            }
+    }
+
+    private fun fetchNotesFromFirestore() {
+        firestore.collection("notes")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val updatedNotes = snapshot.documents.mapNotNull { it.toObject(Note::class.java)
+                    ?.apply { id = it.id } }
+                notesList.clear()
+                notesList.addAll(updatedNotes)
+                noteAdapter.updateNotes(updatedNotes)
+            }
     }
 }

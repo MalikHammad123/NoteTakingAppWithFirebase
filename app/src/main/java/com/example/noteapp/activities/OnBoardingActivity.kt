@@ -6,16 +6,12 @@ import com.example.noteapp.databinding.ActivityOnBoardingBinding
 
 
 class OnBoardingActivity : AppCompatActivity() {
-    var binding: ActivityOnBoardingBinding? = null
-
-
+    lateinit var binding: ActivityOnBoardingBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnBoardingBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
         supportActionBar?.hide()
-
-
 
     }
 }

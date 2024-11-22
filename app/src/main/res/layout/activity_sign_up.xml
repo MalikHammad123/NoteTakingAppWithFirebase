@@ -3,45 +3,154 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@drawable/img_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    android:padding="16dp"
+    tools:context=".activities.SplashActivity">
 
-    <!-- res/layout/activity_sign_up.xml -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <!-- Welcome Text -->
+        <TextView
+            android:id="@+id/welcomeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/userNameEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Username Input -->
+        <EditText
+            android:id="@+id/userNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:alpha="0.2"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:hint="username"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@id/emailEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/welcomeText" />
+        <!-- Username Input -->
         <EditText
             android:id="@+id/emailEditText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:backgroundTint="#000000"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginTop="@dimen/_15sdp"
+            android:alpha="0.2"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:hint="hammadbhai678@gmail.com"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@id/passwordEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userNameEditText" />
 
+        <!-- Password Input -->
         <EditText
             android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:alpha="0.2"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
             android:inputType="textPassword"
-            android:padding="12dp"
-            android:backgroundTint="#000000"
-            android:layout_marginBottom="24dp" />
+            android:hint="********"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@id/confirmPasswordEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailEditText" />
 
-        <Button
-            android:id="@+id/signUpButton"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/confirmPasswordEditText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:backgroundTint="#6200EE"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+            android:layout_marginTop="@dimen/_15sdp"
+            android:alpha="0.2"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:hint="********"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@id/signupButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
 
+        <!-- Login Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signupButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:backgroundTint="@color/black"
+            android:text="Sign Up"
+            android:textColor="@android:color/white"
+            app:cornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@id/googleSignInButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/confirmPasswordEditText" />
+
+        <!-- Google Sign-In Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/googleSignInButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:alpha="0.2"
+            android:drawablePadding="@dimen/_50sdp"
+            android:background="@drawable/button_background"
+            android:drawableLeft="@drawable/googleg_standard_color_18"
+            android:text="Sign in with Google"
+            app:layout_constraintBottom_toTopOf="@id/signinTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/signinTextView" />
+
+        <!-- Sign Up Text -->
+        <TextView
+            android:id="@+id/signinTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:text="Already have an account? Sign in  "
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/googleSignInButton" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/betaProgramText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:gravity="center"
+        android:text="Join our new beta program to test our new experimental feature"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

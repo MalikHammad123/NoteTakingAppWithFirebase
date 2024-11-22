@@ -2,25 +2,27 @@ package com.example.noteapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.noteapp.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-
+    lateinit var binding: ActivitySignUpBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-
-        findViewById<Button>(R.id.signUpButton).setOnClickListener {
-            val email = findViewById<EditText>(R.id.emailEditText).text.toString()
-            val password = findViewById<EditText>(R.id.passwordEditText).text.toString()
+        binding.signupButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
             createAccount(email, password)
+        }
+        binding.signinTextView.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
         }
     }
 

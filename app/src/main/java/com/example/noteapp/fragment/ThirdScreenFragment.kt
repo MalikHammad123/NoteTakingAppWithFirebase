@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.noteapp.LoginActivity
-import com.example.noteapp.MainActivity
+import com.example.noteapp.SignUpActivity
 import com.example.noteapp.databinding.FragmentThirdScreenBinding
 
 class ThirdScreenFragment : Fragment() {
@@ -16,13 +16,10 @@ class ThirdScreenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentThirdScreenBinding.inflate(inflater, container, false)
 
         binding?.finish?.setOnClickListener {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                AppLocalizationActivity.sharedPreferences?.edit()?.putBoolean("isFirstTime", false)?.apply()
-//            }
+
             requireActivity().startActivity(Intent(requireActivity(), LoginActivity::class.java))
         }
         return binding?.root
