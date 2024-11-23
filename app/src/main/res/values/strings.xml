@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NoteApp</string>
     <string name="already_have_an_account">Already have an account ? </string>
+    <string name="default_web_client_id">126465698597-gsbljcn70fdc1hpa2neet65n5upu7l3i.apps.googleusercontent.com</string>
 </resources>

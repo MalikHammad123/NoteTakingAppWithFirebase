@@ -1,19 +1,18 @@
-package com.example.noteapp
+package com.example.noteapp.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.noteapp.activities.CreateTaskActivity
+import com.example.noteapp.adapter.NotesAdapter
 import com.example.noteapp.databinding.ActivityMainBinding
 import com.example.noteapp.model.Note
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 
-
-
+/**
+ * @author :Malik Hammad
+ * Created: 14/11/2024
+ */
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         // Initialize Firestore
         firestore = FirebaseFirestore.getInstance()
 
+
         // Initialize RecyclerView
         noteAdapter = NotesAdapter(notesList,
             onEditClicked = { note ->
@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
                 deleteNoteFromFirestore(note)
             }
         )
-        binding.notesRecyclerView.apply {
+        binding.apply {
+            notesRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = noteAdapter
         }
@@ -54,10 +55,15 @@ class MainActivity : AppCompatActivity() {
         // Load existing notes from Firestore
         fetchNotesFromFirestore()
 
-        // Handle addNoteButton click
-        binding.addNoteButton.setOnClickListener {
-            val intent = Intent(this, CreateTaskActivity::class.java)
+            // Handle addNoteButton click
+            addNoteButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, CreateTaskActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CREATE_TASK)
+        }
+            ivProfile.setOnClickListener {
+                startActivity(Intent(this@MainActivity, LogoutActivity::class.java))
+            }
+
         }
     }
 

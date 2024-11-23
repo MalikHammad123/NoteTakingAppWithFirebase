@@ -57,6 +57,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.6.0")
     // OR use Realtime Database if preferred
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     // Android UI libraries
     implementation("androidx.appcompat:appcompat:1.6.1")

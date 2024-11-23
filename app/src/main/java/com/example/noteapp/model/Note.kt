@@ -5,6 +5,10 @@ import java.io.Serializable
 data class Note(
     var id: String = "",
     val content: String = "",
+    val description: String = "",
     val timestamp: Long = System.currentTimeMillis(),
-    val userId: String = ""
+    val startDate: String = "",
+    val startTime: String = "",
+    val endTime: String = ""
 ) : Serializable
+

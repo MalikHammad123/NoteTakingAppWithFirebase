@@ -1,48 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fon"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Task Name -->
         <TextView
+            android:id="@+id/tvTaskName"
+            android:fontFamily="@font/inter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Task Name"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/etTaskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Enter task name" />
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/button_background"
 
+            android:fontFamily="@font/inter"
+            android:hint="Enter task name"
+            android:padding="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvTaskName" />
         <!-- Category -->
         <TextView
+            android:id="@+id/tvCategory"
             android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+
+
+            android:textColor="@color/black"
             android:text="Category"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etTaskName"
+            tools:ignore="MissingConstraints" />
 
         <LinearLayout
+            android:id="@+id/linear1"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tvCategory">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCategoryEducation"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/inter"
+
                 android:text="Education" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -50,78 +82,155 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/inter"
+
                 android:text="Work" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCategoryGroceries"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:fontFamily="@font/inter"
+
                 android:layout_weight="1"
                 android:text="Groceries" />
         </LinearLayout>
-
-        <!-- Date & Time -->
+        <!-- Date -->
         <TextView
+            android:id="@+id/textDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date and Time"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="@dimen/_10sdp"
 
-        <EditText
-            android:id="@+id/etDateTime"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Select date and time" />
+            android:fontFamily="@font/inter"
+            android:text="Date"
 
-        <!-- Start Time & End Time -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Time"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp"
 
-        <EditText
-            android:id="@+id/etStartTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Enter start time" />
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/linear1"
+            tools:ignore="MissingConstraints" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Time"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etEndTime"
+            android:id="@+id/tvDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/button_background"
+            android:drawableEnd="@drawable/ic_calender"
             android:layout_marginBottom="16dp"
-            android:hint="Enter end time" />
 
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="1/11/2024"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDate" />
+
+        <TextView
+            android:id="@+id/textStartTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/inter"
+            android:text="Start time"
+
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toStartOf="@id/textEndTime"
+            app:layout_constraintStart_toStartOf="@+id/tvDate"
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+        <TextView
+            android:id="@+id/textEndTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/inter"
+            android:text="End time"
+
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvDate"
+            app:layout_constraintStart_toEndOf="@id/textStartTime"
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+        <TextView
+            android:id="@+id/tvStartTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="16dp"
+
+            android:background="@drawable/button_background"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="05:00"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="@id/textStartTime"
+            app:layout_constraintStart_toStartOf="@+id/textStartTime"
+            app:layout_constraintTop_toBottomOf="@+id/textStartTime" />
+
+        <TextView
+            android:id="@+id/tvEndTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="16dp"
+
+            android:background="@drawable/button_background"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="09:00"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintEnd_toEndOf="@+id/textEndTime"
+            app:layout_constraintStart_toStartOf="@+id/textEndTime"
+            app:layout_constraintTop_toBottomOf="@+id/textEndTime" />
         <!-- Priority -->
         <TextView
+            android:id="@+id/tvPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/black"
             android:text="Priority"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_16sdp"
+
+
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvStartTime" />
 
         <LinearLayout
+            android:id="@+id/linear2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
+            android:fontFamily="@font/inter"
+            android:orientation="horizontal"
+
+
+            app:layout_constraintTop_toBottomOf="@+id/tvPriority">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPriorityLow"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:fontFamily="@font/inter"
+
                 android:layout_weight="1"
                 android:text="Low" />
 
@@ -129,6 +238,8 @@
                 android:id="@+id/btnPriorityMedium"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:fontFamily="@font/inter"
+
                 android:layout_weight="1"
                 android:text="Medium" />
 
@@ -136,32 +247,55 @@
                 android:id="@+id/btnPriorityHigh"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:fontFamily="@font/inter"
+
                 android:layout_weight="1"
                 android:text="High" />
         </LinearLayout>
-
         <!-- Description -->
         <TextView
+            android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/black"
             android:text="Description"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linear2" />
 
         <EditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Enter task description" />
+            android:layout_marginTop="@dimen/_5sdp"
 
-        <!-- Create Task Button -->
-        <Button
-            android:id="@+id/btnCreateTask"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:text="Create Task"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-</ScrollView>
+            android:background="@drawable/button_background"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/inter"
+            android:hint="Write your description"
+            android:maxLines="2"
+            android:padding="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Create Task Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateTask"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:backgroundTint="@color/primaryButtonColor"
+        android:fontFamily="@font/inter"
+        android:text="Create New Task"
+        android:textSize="@dimen/_15sdp"
+        app:cornerRadius="@dimen/_7sdp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintWidth_percent="0.8" />
+</androidx.constraintlayout.widget.ConstraintLayout>

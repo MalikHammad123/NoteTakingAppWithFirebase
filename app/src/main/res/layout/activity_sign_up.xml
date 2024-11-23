@@ -20,6 +20,8 @@
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/inter"
+
             android:layout_height="wrap_content"
             android:text="Sign up"
             android:textColor="@android:color/black"
@@ -35,6 +37,8 @@
             android:id="@+id/userNameEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textColorHint="@color/hintColor"
             android:layout_marginTop="@dimen/_15sdp"
             android:alpha="0.2"
             android:background="@drawable/button_background"
@@ -49,9 +53,13 @@
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="0dp"
+            android:fontFamily="@font/inter"
+
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:alpha="0.2"
+            android:textColorHint="@color/hintColor"
+
             android:background="@drawable/button_background"
             android:gravity="center_vertical"
             android:hint="hammadbhai678@gmail.com"
@@ -67,10 +75,14 @@
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+
             android:alpha="0.2"
             android:background="@drawable/button_background"
             android:gravity="center_vertical"
             android:inputType="textPassword"
+            android:textColorHint="@color/hintColor"
+
             android:hint="********"
             android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/confirmPasswordEditText"
@@ -88,6 +100,8 @@
             android:gravity="center_vertical"
             android:hint="********"
             android:inputType="textPassword"
+            android:fontFamily="@font/inter"
+            android:textColorHint="@color/hintColor"
             android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@id/signupButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,6 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:backgroundTint="@color/black"
+            android:fontFamily="@font/inter"
+
             android:text="Sign Up"
             android:textColor="@android:color/white"
             app:cornerRadius="10dp"
@@ -116,6 +132,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:alpha="0.2"
+            android:fontFamily="@font/inter"
+
             android:drawablePadding="@dimen/_50sdp"
             android:background="@drawable/button_background"
             android:drawableLeft="@drawable/googleg_standard_color_18"
@@ -130,6 +148,8 @@
             android:id="@+id/signinTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+
             android:layout_marginTop="@dimen/_15sdp"
             android:text="Already have an account? Sign in  "
             android:textColor="@android:color/black"
@@ -144,6 +164,8 @@
         android:id="@+id/betaProgramText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+
         android:layout_marginBottom="@dimen/_15sdp"
         android:gravity="center"
         android:text="Join our new beta program to test our new experimental feature"

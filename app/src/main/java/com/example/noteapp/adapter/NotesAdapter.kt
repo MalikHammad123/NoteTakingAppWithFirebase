@@ -1,4 +1,4 @@
-package com.example.noteapp
+package com.example.noteapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,16 +26,15 @@ class NotesAdapter(
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val note = notes[position]
         holder.binding.tvContent.text = note.content
-        holder.binding.tvTimestamp.text = android.text.format.DateFormat.format(
-            "dd/MM/yyyy HH:mm:ss",
-            note.timestamp
-        )
+        holder.binding.tvTimeStart.text = note.startTime + " to " + note.endTime
+        //holder.binding.tvTimeEnd.text = note.endTime + "" + note.startTime
+        holder.binding.tvDate.text = note.startDate
 
-        holder.binding.btnEdit.setOnClickListener {
+        holder.binding.imgEdit.setOnClickListener {
             onEditClicked(note)
         }
 
-        holder.binding.btnDelete.setOnClickListener {
+        holder.binding.imgDelete.setOnClickListener {
             onDeleteClicked(note)
         }
     }

@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.noteapp.LoginActivity
-import com.example.noteapp.SignUpActivity
+import com.example.noteapp.activities.LoginActivity
 import com.example.noteapp.databinding.FragmentThirdScreenBinding
 
 class ThirdScreenFragment : Fragment() {
