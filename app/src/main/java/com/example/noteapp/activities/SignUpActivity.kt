@@ -33,7 +33,9 @@ class SignUpActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        binding.apply {         // Configure Google Sign-In
+
+        binding.apply {
+            // Configure Google Sign-In
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -41,15 +43,25 @@ class SignUpActivity : AppCompatActivity() {
             googleSignInClient = GoogleSignIn.getClient(this@SignUpActivity, gso)
 
             // Set up SignUp button
-        binding.signupButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            val confirmPassword = confirmPasswordEditText.text.toString()
+            signupButton.setOnClickListener {
+                val email = emailEditText.text.toString()
+                val password = passwordEditText.text.toString()
+                val confirmPassword = confirmPasswordEditText.text.toString()
 
-            if (validateInputs(email, password, confirmPassword)) {
-                createAccount(email, password)
+                // Get selected role
+                val selectedRoleId = accountTypeRadioGroup.checkedRadioButtonId
+                val selectedRole = when (selectedRoleId) {
+                    R.id.noteMakerRadioButton -> "Maker"
+                    R.id.noteWorkerRadioButton -> "Worker"
+                    else -> null
+                }
+
+                if (validateInputs(email, password, confirmPassword, selectedRole)) {
+                    if (selectedRole != null) {
+                        createAccount(email, password, selectedRole)
+                    }
+                }
             }
-        }
 
             // Set up Google Sign-In button
             googleSignInButton.setOnClickListener {
@@ -63,34 +75,56 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInputs(email: String, password: String, confirmPassword: String): Boolean {
-        if (email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-            Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show()
+    private fun validateInputs(
+        email: String,
+        password: String,
+        confirmPassword: String,
+        role: String?
+    ): Boolean {
+        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             return false
         }
         if (password != confirmPassword) {
-            Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (role == null) {
+            Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
     }
 
-    private fun createAccount(email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    uploadUserData(user?.uid, email)
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Sign up failed: ${task.exception?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+    private fun createAccount(email: String, password: String, role: String) {
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
+                val userMap = mapOf(
+                    "email" to email,
+                    "role" to role
+                )
+                firestore.collection("users").document(userId).set(userMap)
+                    .addOnCompleteListener { firestoreTask ->
+                        if (firestoreTask.isSuccessful) {
+                            Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT)
+                                .show()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                 }
+            } else {
+                Toast.makeText(
+                    this,
+                    "Failed to create account: ${task.exception?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
     }
-
 
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -111,14 +145,18 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
     }
-
-     fun firebaseAuthWithGoogle(idToken: String?) {
+    fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    uploadUserData(user?.uid, user?.email ?: "unknown")
+                    val accountType = when (binding.accountTypeRadioGroup.checkedRadioButtonId) {
+                        R.id.noteMakerRadioButton -> "Maker"
+                        R.id.noteWorkerRadioButton -> "Worker"
+                        else -> "Unknown"
+                    }
+                    uploadUserData(user?.uid, user?.email ?: "unknown", accountType)
                 } else {
                     Toast.makeText(
                         this,
@@ -128,11 +166,13 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
     }
-    private fun uploadUserData(userId: String?, email: String) {
+
+    private fun uploadUserData(userId: String?, email: String, accountType: String) {
         val user = mapOf(
             "userId" to userId,
             "email" to email,
-            "username" to binding.userNameEditText.text.toString()
+            "username" to binding.userNameEditText.text.toString(),
+            "accountType" to accountType
         )
 
         firestore.collection("users").document(userId ?: "unknown")
@@ -151,6 +191,5 @@ class SignUpActivity : AppCompatActivity() {
                 ).show()
             }
     }
-
 }
 

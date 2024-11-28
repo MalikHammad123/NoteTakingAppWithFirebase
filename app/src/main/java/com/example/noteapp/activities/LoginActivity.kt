@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityLoginBinding
@@ -29,8 +28,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-
         firestore = FirebaseFirestore.getInstance()
+
         // Configure Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -38,23 +37,19 @@ class LoginActivity : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this@LoginActivity, gso)
 
-
-
-
         binding.apply {
             loginButton.setOnClickListener {
-                val email = binding.emailEditText.text.toString()
-                val password = binding.passwordEditText.text.toString()
+                val email = emailEditText.text.toString()
+                val password = passwordEditText.text.toString()
                 loginUser(email, password)
             }
 
-            // Sign Up button logic
             signUpButton.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, SignUpActivity::class.java))
             }
+
             googleSignInButton.setOnClickListener {
                 signInWithGoogle()
-
             }
         }
     }
@@ -79,13 +74,14 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun firebaseAuthWithGoogle(idToken: String?) {
+    private fun firebaseAuthWithGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    uploadUserData(user?.uid, user?.email ?: "unknown")
+                    val accountType = "User" // Default account type for Google sign-ins
+                    uploadUserData(user?.uid, user?.email ?: "unknown", accountType)
                 } else {
                     Toast.makeText(
                         this,
@@ -96,11 +92,11 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun uploadUserData(userId: String?, email: String) {
+    private fun uploadUserData(userId: String?, email: String, accountType: String) {
         val user = mapOf(
             "userId" to userId,
             "email" to email,
-            //"username" to binding.userNameEditText.text.toString()
+            "accountType" to accountType
         )
 
         firestore.collection("users").document(userId ?: "unknown")
@@ -120,25 +116,42 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-
     private fun loginUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    updateUI(user)
+                    val userId = auth.currentUser?.uid
+                    firestore.collection("users").document(userId ?: "unknown")
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (document.exists()) {
+                                val accountType = document.getString("accountType") ?: "Unknown"
+                                updateUI(auth.currentUser, accountType)
+                            } else {
+                                Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Error fetching account type", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                 } else {
                     Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                    updateUI(null)
+                    updateUI(null, null)
                 }
             }
     }
 
-
-    private fun updateUI(user: FirebaseUser?) {
+    private fun updateUI(user: FirebaseUser?, accountType: String?) {
         if (user != null) {
+            Toast.makeText(this, "Welcome, $accountType!", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
     }
 }
